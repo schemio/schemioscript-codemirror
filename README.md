@@ -1,4 +1,4 @@
-# CodeMirror 6 language package template
+# CodeMirror 6 language support for SchemioScript
 
 This is an example repository containing a minimal [CodeMirror](https://codemirror.net/6/) language support package. The idea is to clone it, rename it, and edit it to create support for a new language.
 
