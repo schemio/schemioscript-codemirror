@@ -1,41 +1,33 @@
-# Booleans
+# Simple expression
 
-#t
-#f
-
-==>
-
-Program(Boolean, Boolean)
-
-# Identifiers
-
-one
-Two_Three
+a1 +3
 
 ==>
 
-Program(Identifier, Identifier)
+Program(BinaryExpression(VariableName,Number))
 
-# Strings
 
-"hello"
-"one\"\\two"
+# Simple expression2
 
-==>
-
-Program(String, String)
-
-# Applications
-
-(begin
-  (when #t
-    (print (concat "hello" " " "world")))
-  (print "DONE"))
+(a1+(2-3))
 
 ==>
 
-Program(Application(
-  Identifier,
-  Application(Identifier, Boolean, Application(
-    Identifier, Application(Identifier, String, String, String)))
-  Application(Identifier, String)))
+Program(
+    ParenthesizedExpression(
+        BinaryExpression(
+            VariableName,ParenthesizedExpression(
+                BinaryExpression(Number,Number)
+            )
+        )
+    )
+)
+
+
+# Simple expression with whitespace
+
+(a + b * 3)
+
+==>
+
+Program(BinaryExpression(VariableName,Number))

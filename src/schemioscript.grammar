@@ -1,0 +1,34 @@
+@top Program { expression }
+
+@skip { space }
+
+@precedence {
+  Times @left,
+  Divide @left,
+  Modulo @left,
+  Pow @left,
+  Plus @left,
+  Minus @left
+}
+
+expression { VariableName | Number | BinaryExpression | ParenthesizedExpression }
+
+ParenthesizedExpression { "(" expression ")" }
+
+BinaryExpression {
+  expression !Times "*" expression |
+  expression !Divide "/" expression |
+  expression !Modulo "%" expression |
+  expression !Pow "^" expression |
+  expression !Plus "+" expression |
+  expression !Minus "-" expression
+}
+
+
+@tokens {
+  space { @whitespace+ }
+  Number { @digit+ }
+  identifierChar { @asciiLetter | $[_$\u{a1}-\u{10ffff}] }
+  VariableName { identifierChar (identifierChar | @digit)* }
+  @precedence { space, VariableName }
+}
