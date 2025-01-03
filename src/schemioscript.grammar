@@ -1,14 +1,16 @@
 @top Program { expression }
 
-@skip { space }
+@skip { space | LineComment }
+
 
 @precedence {
-  Times @left,
-  Divide @left,
-  Modulo @left,
-  Pow @left,
-  Plus @left,
-  Minus @left
+  LineComment,
+  times @left,
+  divide @left,
+  modulo @left,
+  pow @left,
+  plus @left,
+  minus @left
 }
 
 expression { VariableName | Number | BinaryExpression | ParenthesizedExpression }
@@ -16,17 +18,22 @@ expression { VariableName | Number | BinaryExpression | ParenthesizedExpression 
 ParenthesizedExpression { "(" expression ")" }
 
 BinaryExpression {
-  expression !Times "*" expression |
-  expression !Divide "/" expression |
-  expression !Modulo "%" expression |
-  expression !Pow "^" expression |
-  expression !Plus "+" expression |
-  expression !Minus "-" expression
+  expression !times (divide | ArithOp<"%"> | ArithOp<"*">) expression |
+  expression !plus plusMin expression |
+  expression !pow "^" expression
 }
+
+plusMin { ArithOp<"+" | "-"> }
+
 
 
 @tokens {
   space { @whitespace+ }
+  ArithOp<expr> { expr }
+  LineComment[isolate] { "//" ![\n]* }
+  divide[@name=ArithOp] { "/" }
+  @precedence { "/*", LineComment, divide }
+
   Number { @digit+ }
   identifierChar { @asciiLetter | $[_$\u{a1}-\u{10ffff}] }
   VariableName { identifierChar (identifierChar | @digit)* }
