@@ -16,13 +16,21 @@
 }
 
 expression {
-  VariableName |
   Number |
+  String |
+  VariableName |
   BinaryExpression |
   ParenthesizedExpression |
   AssignmentExpression
-  // VariableDeclaration
 }
+
+@skip {} {
+  String[isolate] {
+    '"' (stringContentDouble | Escape)* '"' |
+    "'" (stringContentSingle | Escape)* "'"
+  }
+}
+
 
 ParenthesizedExpression { "(" expression ")" }
 
@@ -75,4 +83,13 @@ kw<term> { @specialize[@name={term}]<identier, term> }
   identifierChar { @asciiLetter | $[_$\u{a1}-\u{10ffff}] }
   identier { identifierChar (identifierChar | @digit)* }
   @precedence { spaces, newline, identier }
+
+  hex { @digit | $[a-fA-F] }
+
+  Escape {
+    "\\" ("x" hex hex | "u" ("{" hex+ "}" | hex hex hex hex) | ![xu])
+  }
+
+  stringContentSingle { ![\\\n']+ }
+  stringContentDouble { ![\\\n"]+ }
 }

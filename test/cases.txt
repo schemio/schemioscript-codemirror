@@ -70,3 +70,14 @@ local z = 23
 ==>
 
 Script(VariableDeclaration(local,AssignmentExpression(VariableName,Number)),VariableDeclaration(local,AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,Number))),VariableDeclaration(local,AssignmentExpression(VariableName,Number)))
+
+
+# Strings
+
+local name = "John " + "Conor"
+"test"
+
+
+==>
+
+Script(VariableDeclaration(local,AssignmentExpression(VariableName,BinaryExpression(String,ArithOp,String))),ExpressionStatement(String))
