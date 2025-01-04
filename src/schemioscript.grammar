@@ -14,7 +14,10 @@
   and @left,
   or @left,
   assign @right,
-  inc @right
+  inc @right,
+  dec @right,
+  incBy @right,
+  decBy @right
 }
 
 expression {
@@ -25,7 +28,10 @@ expression {
   BinaryExpression |
   ParenthesizedExpression |
   AssignmentExpression |
-  IncrementExpression
+  Increment |
+  Decrement |
+  IncrementByExpression |
+  DecrementByExpression
 }
 
 ForSpec {
@@ -86,8 +92,17 @@ AssignmentExpression {
   VariableName !assign "=" expression
 }
 
-IncrementExpression {
+Increment {
   VariableName !inc "++"
+}
+Decrement {
+  VariableName !dec "--"
+}
+IncrementByExpression {
+  VariableName !incBy "+=" statement
+}
+DecrementByExpression {
+  VariableName !decBy "-=" statement
 }
 
 VariableName { identifier }
