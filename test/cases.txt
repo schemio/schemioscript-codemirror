@@ -64,3 +64,23 @@ Program(
         )
     )
 )
+
+
+# Logic expression
+
+a || b && !c && x
+
+==>
+
+Program(
+    BinaryExpression(
+        VariableName,LogicOp,BinaryExpression(
+            BinaryExpression(
+                VariableName,LogicOp,BinaryExpression(
+                    PostfixExpression(LogicOp,VariableName)
+                )
+            ),
+            LogicOp,VariableName
+        )
+    )
+)

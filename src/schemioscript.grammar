@@ -5,10 +5,13 @@
 
 @precedence {
   LineComment,
+  not,
   times @left,
   divide @left,
   pow @left,
   plus @left,
+  and @left,
+  or @left,
   assign @right
 }
 
@@ -25,7 +28,10 @@ ParenthesizedExpression { "(" expression ")" }
 BinaryExpression {
   expression !times (divide | ArithOp<"%"> | ArithOp<"*">) expression |
   expression !plus plusMin expression |
-  expression !pow ArithOp<"^"> expression
+  expression !pow ArithOp<"^"> expression |
+  expression !and LogicOp<"&&"> expression |
+  expression !or LogicOp<"||" | "??"> expression |
+  PostfixExpression { !not LogicOp<"!"> expression }
 }
 
 plusMin { ArithOp<"+" | "-"> }
@@ -35,10 +41,10 @@ AssignmentExpression {
 }
 
 
-
 @tokens {
   space { @whitespace+ }
   ArithOp<expr> { expr }
+  LogicOp<expr> { expr }
   LineComment[isolate] { "//" ![\n]* }
   divide[@name=ArithOp] { "/" }
   @precedence { "/*", LineComment, divide }
