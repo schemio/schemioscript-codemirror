@@ -1,6 +1,6 @@
 @top Script { statement* }
 
-@skip { spaces | newline | LineComment }
+@skip { spaces | newline | LineComment | BlockComment }
 
 
 @precedence {
@@ -34,6 +34,8 @@ expression {
     '"' (stringContentDouble | Escape)* '"' |
     "'" (stringContentSingle | Escape)* "'"
   }
+
+  BlockComment[isolate] { "/*" (blockCommentContent | blockCommentNewline)* blockCommentEnd }
 }
 
 templateExpr[@name=Interpolation,isolate] { InterpolationStart expression? InterpolationEnd }
@@ -81,6 +83,12 @@ kw<term> { @specialize[@name={term}]<identier, term> }
   templateEnd { "`" }
   templateEscape[@name=Escape] { Escape }
   @else templateContent
+}
+
+@local tokens {
+  blockCommentEnd { "*/" }
+  blockCommentNewline { "\n" }
+  @else blockCommentContent
 }
 
 @tokens {
