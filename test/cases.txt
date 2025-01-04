@@ -58,3 +58,15 @@ local n = 4; n = n + 1; n = n * 3;
 ==>
 
 Script(VariableDeclaration(local,AssignmentExpression(VariableName,Number)),ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,Number))),ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,Number))))
+
+
+# Multi-line statements
+
+local a = 3
+
+local b = a + 4
+local z = 23
+
+==>
+
+Script(VariableDeclaration(local,AssignmentExpression(VariableName,Number)),VariableDeclaration(local,AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,Number))),VariableDeclaration(local,AssignmentExpression(VariableName,Number)))
