@@ -110,8 +110,9 @@ Script(VariableDeclaration(local,AssignmentExpression(VariableName,Number)),Bloc
 
 for(local i = 0; i < 4; i++) {
     j--
+    z +=5
 }
 
 ==>
 
-Script(ForStatement(for,ForSpec(VariableDeclaration(local,AssignmentExpression(VariableName,Number)),BinaryExpression(VariableName,CompareOp,Number),Increment(VariableName)),Block("{",ExpressionStatement(Decrement(VariableName)),"}")))
+Script(ForStatement(for,ForSpec(VariableDeclaration(local,AssignmentExpression(VariableName,Number)),BinaryExpression(VariableName,CompareOp,Number),Increment(VariableName)),Block("{",ExpressionStatement(Decrement(VariableName)),ExpressionStatement(IncrementByExpression(VariableName,ExpressionStatement(Number))),"}")))
