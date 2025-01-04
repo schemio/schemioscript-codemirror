@@ -7,23 +7,32 @@
   LineComment,
   times @left,
   divide @left,
-  modulo @left,
   pow @left,
   plus @left,
-  minus @left
+  assign @right
 }
 
-expression { VariableName | Number | BinaryExpression | ParenthesizedExpression }
+expression {
+  VariableName |
+  Number |
+  BinaryExpression |
+  ParenthesizedExpression |
+  AssignmentExpression
+}
 
 ParenthesizedExpression { "(" expression ")" }
 
 BinaryExpression {
   expression !times (divide | ArithOp<"%"> | ArithOp<"*">) expression |
   expression !plus plusMin expression |
-  expression !pow "^" expression
+  expression !pow ArithOp<"^"> expression
 }
 
 plusMin { ArithOp<"+" | "-"> }
+
+AssignmentExpression {
+  VariableName !assign "=" expression
+}
 
 
 

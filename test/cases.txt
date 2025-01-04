@@ -4,7 +4,7 @@ a1 +3
 
 ==>
 
-Program(BinaryExpression(VariableName,Number))
+Program(BinaryExpression(VariableName,ArithOp,Number))
 
 
 # Simple expression2
@@ -16,8 +16,8 @@ Program(BinaryExpression(VariableName,Number))
 Program(
     ParenthesizedExpression(
         BinaryExpression(
-            VariableName,ParenthesizedExpression(
-                BinaryExpression(Number,Number)
+            VariableName,ArithOp,ParenthesizedExpression(
+                BinaryExpression(Number,ArithOp,Number)
             )
         )
     )
@@ -26,8 +26,41 @@ Program(
 
 # Simple expression with whitespace
 
-(a + b * 3)
+(a + b * 3 - w^2%3)
 
 ==>
 
-Program(BinaryExpression(VariableName,Number))
+Program(
+    ParenthesizedExpression(
+        BinaryExpression(
+            BinaryExpression(
+                VariableName,ArithOp,BinaryExpression(
+                    VariableName,ArithOp,Number
+                )
+            ),
+            ArithOp,BinaryExpression(
+                VariableName,ArithOp,BinaryExpression(
+                    Number,ArithOp,Number
+                )
+            )
+        )
+    )
+)
+
+
+# Assigment expression
+
+qwe = x* 3 +4
+
+==>
+
+Program(
+    AssignmentExpression(
+        VariableName,
+        BinaryExpression(
+            BinaryExpression(VariableName,ArithOp,Number),
+            ArithOp,
+            Number
+        )
+    )
+)
