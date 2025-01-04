@@ -4,8 +4,8 @@
   "description": "SchemioScript language support for CodeMirror",
   "scripts": {
     "test": "mocha test/test.js",
-    "grammar": "lezer-generator src/my.grammar -o src/parser.js",
-    "prepare": "rollup -c"
+    "grammar": "lezer-generator src/schemioscript.grammar -o src/parser",
+    "prepare": "npm run grammar && rollup -c"
   },
   "type": "module",
   "main": "dist/index.cjs",

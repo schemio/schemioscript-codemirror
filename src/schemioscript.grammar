@@ -1,6 +1,6 @@
-@top Program { expression }
+@top Script { statement* }
 
-@skip { space | LineComment }
+@skip { spaces | newline | LineComment }
 
 
 @precedence {
@@ -20,8 +20,8 @@ expression {
   Number |
   BinaryExpression |
   ParenthesizedExpression |
-  AssignmentExpression |
-  VariableDeclaration
+  AssignmentExpression
+  // VariableDeclaration
 }
 
 ParenthesizedExpression { "(" expression ")" }
@@ -35,11 +35,23 @@ BinaryExpression {
   PostfixExpression { !not LogicOp<"!"> expression }
 }
 
+statement[@isGroup=Statement] {
+  VariableDeclaration |
+  ExpressionStatement { expression semi } |
+  ";"
+}
+
+@external tokens insertSemicolon from "./tokens.js" { insertSemi }
+
+semi { ";" | insertSemi }
+
 plusMin { ArithOp<"+" | "-"> }
 
 AssignmentExpression {
   VariableName !assign "=" expression
 }
+
+VariableName { identier }
 
 variableDeclarationKeyword { kw<"local"> }
 
@@ -47,12 +59,12 @@ VariableDeclaration {
   variableDeclarationKeyword AssignmentExpression
 }
 
-
-kw<term> { @specialize[@name={term}]<VariableName, term> }
+kw<term> { @specialize[@name={term}]<identier, term> }
 
 
 @tokens {
-  space { @whitespace+ }
+  spaces[@export] { @whitespace+ }
+  newline[@export] { $[\r\n\u2028\u2029] }
   ArithOp<expr> { expr }
   LogicOp<expr> { expr }
   LineComment[isolate] { "//" ![\n]* }
@@ -61,6 +73,6 @@ kw<term> { @specialize[@name={term}]<VariableName, term> }
 
   Number { @digit+ }
   identifierChar { @asciiLetter | $[_$\u{a1}-\u{10ffff}] }
-  VariableName { identifierChar (identifierChar | @digit)* }
-  @precedence { space, VariableName }
+  identier { identifierChar (identifierChar | @digit)* }
+  @precedence { spaces, newline, identier }
 }
