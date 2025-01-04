@@ -66,6 +66,15 @@ Program(
 )
 
 
+# Local variable assigment
+
+local q = 34
+
+==>
+
+Program(VariableDeclaration(local,AssignmentExpression(VariableName,Number)))
+
+
 # Logic expression
 
 a || b && !c && x

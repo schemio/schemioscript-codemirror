@@ -20,7 +20,8 @@ expression {
   Number |
   BinaryExpression |
   ParenthesizedExpression |
-  AssignmentExpression
+  AssignmentExpression |
+  VariableDeclaration
 }
 
 ParenthesizedExpression { "(" expression ")" }
@@ -39,6 +40,15 @@ plusMin { ArithOp<"+" | "-"> }
 AssignmentExpression {
   VariableName !assign "=" expression
 }
+
+variableDeclarationKeyword { kw<"local"> }
+
+VariableDeclaration {
+  variableDeclarationKeyword AssignmentExpression
+}
+
+
+kw<term> { @specialize[@name={term}]<VariableName, term> }
 
 
 @tokens {
