@@ -18,6 +18,7 @@
 expression {
   Number |
   String |
+  TemplateString |
   VariableName |
   BinaryExpression |
   ParenthesizedExpression |
@@ -25,11 +26,17 @@ expression {
 }
 
 @skip {} {
+  TemplateString[isolate] {
+    templateStart (templateEscape | templateContent | templateExpr)* templateEnd
+  }
+
   String[isolate] {
     '"' (stringContentDouble | Escape)* '"' |
     "'" (stringContentSingle | Escape)* "'"
   }
 }
+
+templateExpr[@name=Interpolation,isolate] { InterpolationStart expression? InterpolationEnd }
 
 
 ParenthesizedExpression { "(" expression ")" }
@@ -69,6 +76,12 @@ VariableDeclaration {
 
 kw<term> { @specialize[@name={term}]<identier, term> }
 
+@local tokens {
+  InterpolationStart[closedBy=InterpolationEnd] { "${" }
+  templateEnd { "`" }
+  templateEscape[@name=Escape] { Escape }
+  @else templateContent
+}
 
 @tokens {
   spaces[@export] { @whitespace+ }
@@ -92,4 +105,6 @@ kw<term> { @specialize[@name={term}]<identier, term> }
 
   stringContentSingle { ![\\\n']+ }
   stringContentDouble { ![\\\n"]+ }
+  templateStart { "`" }
+  InterpolationEnd[openedBy=InterpolationStart] { "}" }
 }

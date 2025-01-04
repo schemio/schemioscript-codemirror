@@ -81,3 +81,12 @@ local name = "John " + "Conor"
 ==>
 
 Script(VariableDeclaration(local,AssignmentExpression(VariableName,BinaryExpression(String,ArithOp,String))),ExpressionStatement(String))
+
+
+# Template strings
+
+local name = `${myName} Conor (${age+3})`
+
+
+==>
+Script(VariableDeclaration(local,AssignmentExpression(VariableName,TemplateString(Interpolation(InterpolationStart,VariableName,InterpolationEnd),Interpolation(InterpolationStart,BinaryExpression(VariableName,ArithOp,Number),InterpolationEnd)))))
