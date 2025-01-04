@@ -10,9 +10,11 @@
   divide @left,
   pow @left,
   plus @left,
+  rel @left,
   and @left,
   or @left,
-  assign @right
+  assign @right,
+  inc @right
 }
 
 expression {
@@ -22,7 +24,14 @@ expression {
   VariableName |
   BinaryExpression |
   ParenthesizedExpression |
-  AssignmentExpression
+  AssignmentExpression |
+  IncrementExpression
+}
+
+ForSpec {
+  "("
+  (VariableDeclaration | expression)? ";" expression? ";" expression?
+  ")"
 }
 
 @skip {} {
@@ -46,6 +55,7 @@ ParenthesizedExpression { "(" expression ")" }
 BinaryExpression {
   expression !times (divide | ArithOp<"%"> | ArithOp<"*">) expression |
   expression !plus plusMin expression |
+  expression !rel (LessThan | CompareOp<"<=" | ">" "="?> ) expression |
   expression !pow ArithOp<"^"> expression |
   expression !and LogicOp<"&&"> expression |
   expression !or LogicOp<"||" | "??"> expression |
@@ -54,9 +64,17 @@ BinaryExpression {
 
 statement[@isGroup=Statement] {
   VariableDeclaration |
+  ForStatement { kw<"for"> ForSpec statement } |
   ExpressionStatement { expression semi } |
+  Block |
   ";"
 }
+
+Block {
+  "{" statement* "}"
+}
+
+
 
 @external tokens insertSemicolon from "./tokens.js" { insertSemi }
 
@@ -68,7 +86,11 @@ AssignmentExpression {
   VariableName !assign "=" expression
 }
 
-VariableName { identier }
+IncrementExpression {
+  VariableName !inc "++"
+}
+
+VariableName { identifier }
 
 variableDeclarationKeyword { kw<"local"> }
 
@@ -76,7 +98,7 @@ VariableDeclaration {
   variableDeclarationKeyword AssignmentExpression
 }
 
-kw<term> { @specialize[@name={term}]<identier, term> }
+kw<term> { @specialize[@name={term}]<identifier, term> }
 
 @local tokens {
   InterpolationStart[closedBy=InterpolationEnd] { "${" }
@@ -95,6 +117,7 @@ kw<term> { @specialize[@name={term}]<identier, term> }
   spaces[@export] { @whitespace+ }
   newline[@export] { $[\r\n\u2028\u2029] }
   ArithOp<expr> { expr }
+  CompareOp<expr> { expr }
   LogicOp<expr> { expr }
   LineComment[isolate] { "//" ![\n]* }
   divide[@name=ArithOp] { "/" }
@@ -102,8 +125,8 @@ kw<term> { @specialize[@name={term}]<identier, term> }
 
   Number { @digit+ }
   identifierChar { @asciiLetter | $[_$\u{a1}-\u{10ffff}] }
-  identier { identifierChar (identifierChar | @digit)* }
-  @precedence { spaces, newline, identier }
+  identifier { identifierChar (identifierChar | @digit)* }
+  @precedence { spaces, newline, identifier }
 
   hex { @digit | $[a-fA-F] }
 
@@ -115,4 +138,7 @@ kw<term> { @specialize[@name={term}]<identier, term> }
   stringContentDouble { ![\\\n"]+ }
   templateStart { "`" }
   InterpolationEnd[openedBy=InterpolationStart] { "}" }
+
+  LessThan[@name=CompareOp] { "<" }
+  "{" "}" "<" ">"
 }

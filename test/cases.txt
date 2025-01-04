@@ -89,6 +89,7 @@ local name = `${myName} Conor (${age+3})`
 
 
 ==>
+
 Script(VariableDeclaration(local,AssignmentExpression(VariableName,TemplateString(Interpolation(InterpolationStart,VariableName,InterpolationEnd),Interpolation(InterpolationStart,BinaryExpression(VariableName,ArithOp,Number),InterpolationEnd)))))
 
 
@@ -103,3 +104,13 @@ local z = 23 + /* "qwe" */ 5
 ==>
 
 Script(VariableDeclaration(local,AssignmentExpression(VariableName,Number)),BlockComment,VariableDeclaration(local,AssignmentExpression(VariableName,BinaryExpression(Number,ArithOp,BlockComment,Number))))
+
+
+# For loop
+
+for(local i = 0; i < 4; i++) {
+    j = i + 1
+}
+
+==>
+Script()
