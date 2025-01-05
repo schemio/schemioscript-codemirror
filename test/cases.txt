@@ -177,3 +177,25 @@ z = if (a < b) { 0 } else { 1 }
 ==>
 
 Script(ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(Number),"}"),else,Block("{",ExpressionStatement(Number),"}"))))))
+
+
+
+# Function declaration
+
+func test1() {
+   z = ""
+   k = z + 3
+}
+
+func test1(a) {
+    z = a + 5
+    z + 2
+}
+
+func test1(a, b, c) {
+    z = a + b + c
+    z + 2
+}
+==>
+
+Script(FuncDeclaration(func,FuncName,Block("{",ExpressionStatement(AssignmentExpression(VariableName,String)),ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,Number))),"}")),FuncDeclaration(func,FuncName,FuncArgName,Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,Number))),ExpressionStatement(BinaryExpression(VariableName,ArithOp,Number)),"}")),FuncDeclaration(func,FuncName,FuncArgName,FuncArgName,FuncArgName,Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(BinaryExpression(VariableName,ArithOp,VariableName),ArithOp,VariableName))),ExpressionStatement(BinaryExpression(VariableName,ArithOp,Number)),"}")))

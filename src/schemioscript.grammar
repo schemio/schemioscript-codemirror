@@ -69,6 +69,7 @@ BinaryExpression {
 statement[@isGroup=Statement] {
   VariableDeclaration |
   ExpressionStatement { expression semi } |
+  FuncDeclaration |
   Block |
   ";"
 }
@@ -84,7 +85,6 @@ WhileSpec {
   (VariableDeclaration | expression)
   ")"
 }
-
 
 ForSpec {
   "("
@@ -129,6 +129,15 @@ variableDeclarationKeyword { kw<"local"> }
 VariableDeclaration {
   variableDeclarationKeyword AssignmentExpression
 }
+
+funcKeyword { kw<"func"> }
+
+FuncDeclaration {
+  funcKeyword FuncName "(" (FuncArgName ("," FuncArgName)* )* ")" Block
+}
+
+FuncName { identifier }
+FuncArgName { identifier }
 
 kw<term> { @specialize[@name={term}]<identifier, term> }
 
