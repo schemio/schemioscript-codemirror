@@ -36,12 +36,20 @@ expression {
   Decrement |
   IncrementByExpression |
   DecrementByExpression |
-  CallExpression { expression !call ArgList }
+  CallExpression { expression !call ArgList } |
+  ArrowFunction
+}
+
+ArrowFunction { ParamList "=>" Block }
+
+commaSep<content> {
+  "" | content ("," content?)*
 }
 
 ArgList {
-  "(" (expression ("," expression)* )*  ")"
+  "(" commaSep<expression> ")"
 }
+
 
 @skip {} {
   TemplateString[isolate] {
@@ -66,9 +74,9 @@ BinaryExpression {
   expression !plus plusMin expression |
   expression !rel (LessThan | CompareOp<"<=" | ">" "="?> ) expression |
   expression !pow ArithOp<"^"> expression |
-  expression !and LogicOp<"&&"> expression |
   expression !equals LogicOp<"=="> expression |
   expression !notEqual LogicOp<"!="> expression |
+  expression !and LogicOp<"&&"> expression |
   expression !or LogicOp<"||" | "??"> expression |
   PostfixExpression { !not LogicOp<"!"> expression } |
   ForStatement { kw<"for"> ForSpec statement } |
@@ -132,7 +140,7 @@ DecrementByExpression {
   VariableName !decBy "-=" statement
 }
 
-VariableName { identifier }
+VariableName { identifier ~name }
 
 variableDeclarationKeyword { kw<"local"> }
 
@@ -143,11 +151,18 @@ VariableDeclaration {
 funcKeyword { kw<"func"> }
 
 FuncDeclaration {
-  funcKeyword FuncName "(" (FuncArgName ("," FuncArgName)* )* ")" Block
+  funcKeyword FuncName ParamList Block
 }
 
+ParamList {
+  "(" commaSep<FuncArgName> ")"
+}
+// ParamList {
+//   "(" (FuncArgName ("," FuncArgName)* )* ")"
+// }
+
 FuncName { identifier }
-FuncArgName { identifier }
+FuncArgName { identifier ~name }
 
 kw<term> { @specialize[@name={term}]<identifier, term> }
 
