@@ -6,7 +6,8 @@
 @precedence {
   LineComment,
   call,
-  else @right
+  else @right,
+  member,
   not,
   equals @left,
   notEqual @left,
@@ -31,6 +32,7 @@ expression {
   VariableName |
   BinaryExpression |
   ParenthesizedExpression |
+  MemberExpression |
   AssignmentExpression |
   Increment |
   Decrement |
@@ -38,6 +40,14 @@ expression {
   DecrementByExpression |
   CallExpression { expression !call ArgList } |
   ArrowFunction
+}
+
+MemberExpression {
+  expression !member "." (VariableName | MemberCallExpression)
+}
+
+MemberCallExpression {
+  VariableName ArgList
 }
 
 ArrowFunction { (ParamList | FuncArgName ) "=>" Block }
