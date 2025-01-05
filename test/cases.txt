@@ -199,3 +199,12 @@ func test1(a, b, c) {
 ==>
 
 Script(FuncDeclaration(func,FuncName,Block("{",ExpressionStatement(AssignmentExpression(VariableName,String)),ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,Number))),"}")),FuncDeclaration(func,FuncName,FuncArgName,Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,Number))),ExpressionStatement(BinaryExpression(VariableName,ArithOp,Number)),"}")),FuncDeclaration(func,FuncName,FuncArgName,FuncArgName,FuncArgName,Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(BinaryExpression(VariableName,ArithOp,VariableName),ArithOp,VariableName))),ExpressionStatement(BinaryExpression(VariableName,ArithOp,Number)),"}")))
+
+
+# Function invocation
+
+sin(a) * rnd()
+
+==>
+
+Script(ExpressionStatement(BinaryExpression(CallExpression(VariableName,ArgList(VariableName)),ArithOp,CallExpression(VariableName,ArgList))))

@@ -5,6 +5,7 @@
 
 @precedence {
   LineComment,
+  call,
   else @right
   not,
   times @left,
@@ -32,7 +33,12 @@ expression {
   Increment |
   Decrement |
   IncrementByExpression |
-  DecrementByExpression
+  DecrementByExpression |
+  CallExpression { expression !call ArgList }
+}
+
+ArgList {
+  "(" (expression ("," expression)* )*  ")"
 }
 
 @skip {} {
