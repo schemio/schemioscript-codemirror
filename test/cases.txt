@@ -116,3 +116,14 @@ for(local i = 0; i < 4; i++) {
 ==>
 
 Script(ForStatement(for,ForSpec(VariableDeclaration(local,AssignmentExpression(VariableName,Number)),BinaryExpression(VariableName,CompareOp,Number),Increment(VariableName)),Block("{",ExpressionStatement(Decrement(VariableName)),ExpressionStatement(IncrementByExpression(VariableName,ExpressionStatement(Number))),"}")))
+
+
+# While loop
+
+while (j > 0) {
+    z += 3
+}
+
+==>
+
+Script(WhileStatement(while,WhileSpec(BinaryExpression(VariableName,CompareOp,Number)),Block("{",ExpressionStatement(IncrementByExpression(VariableName,ExpressionStatement(Number))),"}")))

@@ -34,12 +34,6 @@ expression {
   DecrementByExpression
 }
 
-ForSpec {
-  "("
-  (VariableDeclaration | expression)? ";" expression? ";" expression?
-  ")"
-}
-
 @skip {} {
   TemplateString[isolate] {
     templateStart (templateEscape | templateContent | templateExpr)* templateEnd
@@ -70,16 +64,32 @@ BinaryExpression {
 
 statement[@isGroup=Statement] {
   VariableDeclaration |
+  ExpressionStatement { expression semi } |
   ForStatement { kw<"for"> ForSpec statement } |
-  ExpressionStatement { expression } |
+  WhileStatement { kw<"while"> WhileSpec statement } |
   Block |
   ";"
 }
+
+WhileSpec {
+  "("
+  (VariableDeclaration | expression)
+  ")"
+}
+
+
+ForSpec {
+  "("
+  (VariableDeclaration | expression)? ";" expression? ";" expression?
+  ")"
+}
+
 
 Block {
   "{" statement* "}"
 }
 
+@context trackNewline from "./tokens.js"
 
 @external tokens insertSemicolon from "./tokens.js" { insertSemi }
 
