@@ -40,7 +40,7 @@ expression {
   ArrowFunction
 }
 
-ArrowFunction { ParamList "=>" Block }
+ArrowFunction { (ParamList | FuncArgName ) "=>" Block }
 
 commaSep<content> {
   "" | content ("," content?)*

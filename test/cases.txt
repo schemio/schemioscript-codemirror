@@ -254,3 +254,14 @@ local func1 = (a, b, c) => {
 ==>
 
 Script(VariableDeclaration(local,AssignmentExpression(VariableName,ArrowFunction(ParamList(FuncArgName,FuncArgName,FuncArgName),Block("{",ExpressionStatement(CallExpression(VariableName,ArgList(String))),"}")))))
+
+
+# Arrow function with single argument without parenthesis
+
+local func1 = x => {
+    log("Hello" + x)
+}
+
+==>
+
+Script(VariableDeclaration(local,AssignmentExpression(VariableName,ArrowFunction(FuncArgName,Block("{",ExpressionStatement(CallExpression(VariableName,ArgList(BinaryExpression(String,ArithOp,VariableName)))),"}")))))
