@@ -127,3 +127,43 @@ while (j > 0) {
 ==>
 
 Script(WhileStatement(while,WhileSpec(BinaryExpression(VariableName,CompareOp,Number)),Block("{",ExpressionStatement(IncrementByExpression(VariableName,ExpressionStatement(Number))),"}")))
+
+
+# If condition
+
+if (a < b) {
+    z = a + b
+}
+
+==>
+
+Script(IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}")))
+
+
+# If else condition
+
+if (a < b) {
+    z = a + b
+} else {
+    z = a - b
+}
+
+==>
+
+Script(IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}"),else,Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}")))
+
+
+
+# If else if condition
+
+if (a < b) {
+    z = a + b
+} else if (z > g) {
+    z = a - b
+} else {
+    z = 4
+}
+
+==>
+
+Script(IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}"),else,IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}"),else,Block("{",ExpressionStatement(AssignmentExpression(VariableName,Number)),"}"))))

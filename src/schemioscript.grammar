@@ -5,6 +5,7 @@
 
 @precedence {
   LineComment,
+  else @right
   not,
   times @left,
   divide @left,
@@ -67,8 +68,15 @@ statement[@isGroup=Statement] {
   ExpressionStatement { expression semi } |
   ForStatement { kw<"for"> ForSpec statement } |
   WhileStatement { kw<"while"> WhileSpec statement } |
+  IfStatement { kw<"if"> IfSpec statement (!else kw<"else"> statement)? } |
   Block |
   ";"
+}
+
+IfSpec {
+  "("
+  (VariableDeclaration | expression)
+  ")"
 }
 
 WhileSpec {
