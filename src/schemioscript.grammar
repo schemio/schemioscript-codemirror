@@ -15,6 +15,7 @@
   divide @left,
   pow @left,
   plus @left,
+  negation @left,
   rel @left,
   and @left,
   or @left,
@@ -28,6 +29,10 @@
 expression {
   Number |
   String |
+  kw<"this"> |
+  kw<"null"> |
+  kw<"true"> |
+  kw<"false"> |
   TemplateString |
   VariableName |
   BinaryExpression |
@@ -43,11 +48,7 @@ expression {
 }
 
 MemberExpression {
-  expression !member "." (VariableName | MemberCallExpression)
-}
-
-MemberCallExpression {
-  VariableName ArgList
+  expression !member "." VariableName
 }
 
 ArrowFunction { (ParamList | FuncArgName ) "=>" Block }
@@ -84,6 +85,7 @@ BinaryExpression {
   expression !plus plusMin expression |
   expression !rel (LessThan | CompareOp<"<=" | ">" "="?> ) expression |
   expression !pow ArithOp<"^"> expression |
+  Negation { !negation plusMin expression } |
   expression !equals LogicOp<"=="> expression |
   expression !notEqual LogicOp<"!="> expression |
   expression !and LogicOp<"&&"> expression |
@@ -91,21 +93,27 @@ BinaryExpression {
   PostfixExpression { !not LogicOp<"!"> expression } |
   ForStatement { kw<"for"> ForSpec statement } |
   WhileStatement { kw<"while"> WhileSpec statement } |
-  IfStatement { kw<"if"> IfSpec statement (!else kw<"else"> statement)? }
+  IfStatement { kw<"if"> IfSpec statement (!else kw<"else"> (statement | expression ))? }
 }
 
 statement[@isGroup=Statement] {
   VariableDeclaration |
   ExpressionStatement { expression semi } |
+  StructDefinition {kw<"struct"> FuncName StructSpec } |
   FuncDeclaration |
   Block |
   ";"
 }
 
+StructSpec {
+  "{"
+  (StructProperty {VariableName ":" expression} ","?)*
+  (StructFunction {FuncName ParamList Block})*
+  "}"
+}
+
 IfSpec {
-  "("
-  (VariableDeclaration | expression)
-  ")"
+  "(" expression ")"
 }
 
 WhileSpec {
@@ -134,7 +142,7 @@ semi { ";" | insertSemi }
 plusMin { ArithOp<"+" | "-"> }
 
 AssignmentExpression {
-  VariableName !assign "=" expression
+  ( VariableName | MemberExpression ) !assign "=" expression
 }
 
 Increment {
@@ -155,7 +163,7 @@ VariableName { identifier ~name }
 variableDeclarationKeyword { kw<"local"> }
 
 VariableDeclaration {
-  variableDeclarationKeyword AssignmentExpression
+  variableDeclarationKeyword VariableName ("=" expression)?
 }
 
 funcKeyword { kw<"func"> }
@@ -167,9 +175,6 @@ FuncDeclaration {
 ParamList {
   "(" commaSep<FuncArgName> ")"
 }
-// ParamList {
-//   "(" (FuncArgName ("," FuncArgName)* )* ")"
-// }
 
 FuncName { identifier }
 FuncArgName { identifier ~name }
@@ -199,7 +204,12 @@ kw<term> { @specialize[@name={term}]<identifier, term> }
   divide[@name=ArithOp] { "/" }
   @precedence { "/*", LineComment, divide }
 
-  Number { @digit+ }
+  Number {
+    (@digit+ | @digit+ "." @digit+ | "." @digit+)
+  }
+
+  @precedence { Number "." }
+
   identifierChar { @asciiLetter | $[_$\u{a1}-\u{10ffff}] }
   identifier { identifierChar (identifierChar | @digit)* }
   @precedence { spaces, newline, identifier }
