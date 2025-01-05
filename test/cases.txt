@@ -140,6 +140,19 @@ if (a < b) {
 Script(ExpressionStatement(BinaryExpression(IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}")))))
 
 
+# If condition 2
+
+if ( a == b ) {
+    z = 2
+} else if ( z != k + 2) {
+    b = 2
+}
+
+==>
+
+Script(ExpressionStatement(BinaryExpression(IfStatement(if,IfSpec(BinaryExpression(VariableName,LogicOp,VariableName)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,Number)),"}"),else,ExpressionStatement(BinaryExpression(IfStatement(if,IfSpec(BinaryExpression(BinaryExpression(VariableName,LogicOp,VariableName),ArithOp,Number)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,Number)),"}"))))))))
+
+
 # If else condition
 
 if (a < b) {
