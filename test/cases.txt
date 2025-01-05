@@ -115,7 +115,7 @@ for(local i = 0; i < 4; i++) {
 
 ==>
 
-Script(ForStatement(for,ForSpec(VariableDeclaration(local,AssignmentExpression(VariableName,Number)),BinaryExpression(VariableName,CompareOp,Number),Increment(VariableName)),Block("{",ExpressionStatement(Decrement(VariableName)),ExpressionStatement(IncrementByExpression(VariableName,ExpressionStatement(Number))),"}")))
+Script(ExpressionStatement(BinaryExpression(ForStatement(for,ForSpec(VariableDeclaration(local,AssignmentExpression(VariableName,Number)),BinaryExpression(VariableName,CompareOp,Number),Increment(VariableName)),Block("{",ExpressionStatement(Decrement(VariableName)),ExpressionStatement(IncrementByExpression(VariableName,ExpressionStatement(Number))),"}")))))
 
 
 # While loop
@@ -126,7 +126,7 @@ while (j > 0) {
 
 ==>
 
-Script(WhileStatement(while,WhileSpec(BinaryExpression(VariableName,CompareOp,Number)),Block("{",ExpressionStatement(IncrementByExpression(VariableName,ExpressionStatement(Number))),"}")))
+Script(ExpressionStatement(BinaryExpression(WhileStatement(while,WhileSpec(BinaryExpression(VariableName,CompareOp,Number)),Block("{",ExpressionStatement(IncrementByExpression(VariableName,ExpressionStatement(Number))),"}")))))
 
 
 # If condition
@@ -137,7 +137,7 @@ if (a < b) {
 
 ==>
 
-Script(IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}")))
+Script(ExpressionStatement(BinaryExpression(IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}")))))
 
 
 # If else condition
@@ -150,7 +150,7 @@ if (a < b) {
 
 ==>
 
-Script(IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}"),else,Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}")))
+Script(ExpressionStatement(BinaryExpression(IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}"),else,Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}")))))
 
 
 
@@ -166,4 +166,14 @@ if (a < b) {
 
 ==>
 
-Script(IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}"),else,IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}"),else,Block("{",ExpressionStatement(AssignmentExpression(VariableName,Number)),"}"))))
+Script(ExpressionStatement(BinaryExpression(IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}"),else,ExpressionStatement(BinaryExpression(IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(VariableName,ArithOp,VariableName))),"}"),else,Block("{",ExpressionStatement(AssignmentExpression(VariableName,Number)),"}"))))))))
+
+
+
+# If as assignment
+
+z = if (a < b) { 0 } else { 1 }
+
+==>
+
+Script(ExpressionStatement(AssignmentExpression(VariableName,BinaryExpression(IfStatement(if,IfSpec(BinaryExpression(VariableName,CompareOp,VariableName)),Block("{",ExpressionStatement(Number),"}"),else,Block("{",ExpressionStatement(Number),"}"))))))
