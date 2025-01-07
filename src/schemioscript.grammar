@@ -35,6 +35,7 @@ expression {
   kw<"false"> |
   TemplateString |
   VariableName |
+  ExternalObjectReference |
   BinaryExpression |
   ParenthesizedExpression |
   MemberExpression |
@@ -45,6 +46,10 @@ expression {
   DecrementByExpression |
   CallExpression { expression !call ArgList } |
   ArrowFunction
+}
+
+ExternalObjectReference {
+  "@" (objectNameWithoutSpace | String | TemplateString)
 }
 
 MemberExpression {
@@ -203,6 +208,9 @@ kw<term> { @specialize[@name={term}]<identifier, term> }
   LineComment[isolate] { "//" ![\n]* }
   divide[@name=ArithOp] { "/" }
   @precedence { "/*", LineComment, divide }
+
+  objectNameWithoutSpace { (@asciiLetter | @digit | "_")+ }
+
 
   Number {
     (@digit+ | @digit+ "." @digit+ | "." @digit+)

@@ -5,6 +5,28 @@ import {completeFromList} from "@codemirror/autocomplete"
 
 export const SchemioScriptLanguage = LRLanguage.define({
   parser: parser.configure({
+    props: [
+      indentNodeProp.add({
+        Application: delimitedIndent({closing: ")", align: false})
+      }),
+      foldNodeProp.add({
+        Application: foldInside
+      }),
+      styleTags({
+        VariableName: t.variableName,
+        true: t.bool,
+        false: t.bool,
+        null: t.null,
+        String: t.string,
+        TemplateString: t.special(t.string),
+        "for while if else struct local": t.keyword,
+        FuncName: t.function(t.variableName),
+        Number: t.number,
+        LineComment: t.lineComment,
+        BlockComment: t.blockComment,
+        "( )": t.paren
+      })
+    ]
   }),
   languageData: {
     commentTokens: {line: "//"}
@@ -28,5 +50,5 @@ export const SchemioScriptCompletion = SchemioScriptLanguage.data.of({
 
 
 export function SchemioScript() {
-  return new LanguageSupport(SchemioScriptLanguage)
+  return new LanguageSupport(SchemioScriptLanguage, [SchemioScriptCompletion])
 }

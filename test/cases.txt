@@ -364,6 +364,16 @@ log('')
 Script(VariableDeclaration(local,VariableName,Number),VariableDeclaration(local,VariableName),VariableDeclaration(local,VariableName),VariableDeclaration(local,VariableName,BinaryExpression(VariableName,ArithOp,Number)),ExpressionStatement(CallExpression(VariableName,ArgList(String))))
 
 
+# Object references
+
+local obj1 = @Object1
+local obj2 = @"Object 2"
+local obj3 = @`Object ${id3}`
+
+==>
+
+Script(VariableDeclaration(local,VariableName,ExternalObjectReference),VariableDeclaration(local,VariableName,ExternalObjectReference(String)),VariableDeclaration(local,VariableName,ExternalObjectReference(TemplateString(Interpolation(InterpolationStart,VariableName,InterpolationEnd)))))
+
 
 # Mind-map
 
