@@ -21,9 +21,12 @@ export const SchemioScriptLanguage = LRLanguage.define({
         TemplateString: t.special(t.string),
         "for while if else struct local": t.keyword,
         FuncName: t.function(t.variableName),
+        FuncArgName: t.attributeName,
         Number: t.number,
         LineComment: t.lineComment,
         BlockComment: t.blockComment,
+        ExternalObjectReference: t.strong,
+        StructPropertyName: t.propertyName,
         "( )": t.paren
       })
     ]

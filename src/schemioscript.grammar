@@ -112,7 +112,7 @@ statement[@isGroup=Statement] {
 
 StructSpec {
   "{"
-  (StructProperty {VariableName ":" expression} ","?)*
+  (StructProperty {StructPropertyName ":" expression} ","?)*
   (StructFunction {FuncName ParamList Block})*
   "}"
 }
@@ -182,6 +182,7 @@ ParamList {
 }
 
 FuncName { identifier }
+StructPropertyName { identifier }
 FuncArgName { identifier ~name }
 
 kw<term> { @specialize[@name={term}]<identifier, term> }
