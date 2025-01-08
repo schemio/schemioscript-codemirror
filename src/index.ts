@@ -36,6 +36,89 @@ export const SchemioScriptLanguage = LRLanguage.define({
   }
 })
 
+const functions = `
+  acos
+  asin
+  atan
+  ceil
+  cos
+  debugItem
+  duplicate
+  findChildItemByName
+  findChildItemsByTag
+  findItemById
+  findItemByName
+  findParent
+  floor
+  getAngle
+  getEventArg
+  getEventName
+  getHeight
+  getId
+  getName
+  getOpacity
+  getPos
+  getPosX
+  getPosY
+  getScaleX
+  getScaleY
+  getSelfOpacity
+  getShape
+  getTags
+  getValue
+  getVar
+  getWidth
+  getWorldPos
+  hide
+  ifcond
+  isVisible
+  List
+  localPoint
+  log
+  log10
+  log2
+  logn
+  Map
+  matchWorld
+  min
+  mount
+  mountChild
+  mountRoot
+  parseFloat
+  parseInt
+  PI
+  pow
+  remove
+  removeChildItemsByTag
+  rgba
+  rnd
+  round
+  sendEvent
+  setAngle
+  setHeight
+  setOpacity
+  setPos
+  setPosX
+  setPosY
+  setScaleX
+  setScaleY
+  setSelfOpacity
+  setText
+  setTextColor
+  setTextSize
+  setValue
+  setVar
+  setWidth
+  setWorldPos
+  show
+  sin
+  sqrt
+  tag
+  tan
+  uid
+  worldPoint
+`;
+
 export const SchemioScriptCompletion = SchemioScriptLanguage.data.of({
   autocomplete: completeFromList([
     {label: "func", type: "keyword"},
@@ -45,10 +128,9 @@ export const SchemioScriptCompletion = SchemioScriptLanguage.data.of({
     {label: "while", type: "keyword"},
     {label: "if", type: "keyword"},
     {label: "else", type: "keyword"},
-    {label: "abs", type: "function"},
-    {label: "sin", type: "function"},
-    {label: "cos", type: "function"},
-  ])
+  ].concat(functions.split(/\s+/).filter(name => name).map(name => {return {
+    label: name, type: 'function'
+  }})))
 })
 
 
