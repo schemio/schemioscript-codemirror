@@ -2,6 +2,7 @@
   "name": "codemirror-lang-schemioscript",
   "version": "0.1.0",
   "description": "SchemioScript language support for CodeMirror",
+  "author": "Ivan Shubin",
   "scripts": {
     "test": "mocha test/test.js",
     "grammar": "lezer-generator src/schemioscript.grammar -o src/parser",
