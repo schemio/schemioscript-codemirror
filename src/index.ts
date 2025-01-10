@@ -1,5 +1,5 @@
 import {parser} from "./schemioscript.grammar"
-import {LRLanguage, LanguageSupport, indentNodeProp, foldNodeProp, foldInside, delimitedIndent} from "@codemirror/language"
+import {LRLanguage, LanguageSupport, indentNodeProp, foldNodeProp, foldInside, delimitedIndent, continuedIndent} from "@codemirror/language"
 import {styleTags, tags as t} from "@lezer/highlight"
 import {completeFromList} from "@codemirror/autocomplete"
 
@@ -7,10 +7,13 @@ export const SchemioScriptLanguage = LRLanguage.define({
   parser: parser.configure({
     props: [
       indentNodeProp.add({
-        Application: delimitedIndent({closing: ")", align: false})
+        IfStatement: continuedIndent({except: /^\s*({|else\b)/}),
+        Block: delimitedIndent({closing: "}"}),
+        ArrowFunction: cx => cx.baseIndent + cx.unit,
+        "TemplateString BlockComment": () => null,
       }),
       foldNodeProp.add({
-        Application: foldInside
+        Block: foldInside
       }),
       styleTags({
         VariableName: t.variableName,
@@ -19,10 +22,11 @@ export const SchemioScriptLanguage = LRLanguage.define({
         null: t.null,
         String: t.string,
         TemplateString: t.special(t.string),
-        "for while if else struct local": t.keyword,
-        FuncName: t.function(t.variableName),
+        "for while if else struct local func this": t.keyword,
+        FuncName: t.function(t.strong),
         FuncArgName: t.attributeName,
         Number: t.number,
+        CallExpression: t.macroName,
         LineComment: t.lineComment,
         BlockComment: t.blockComment,
         ExternalObjectReference: t.strong,
@@ -32,7 +36,9 @@ export const SchemioScriptLanguage = LRLanguage.define({
     ]
   }),
   languageData: {
-    commentTokens: {line: "//"}
+    closeBrackets: {brackets: ["(", "[", "{", "'", '"', "`"]},
+    commentTokens: {line: "//", block: {open: "/*", close: "*/"}},
+    indentOnInput: /^\s*(?:case |default:|\{|\}|<\/)$/,
   }
 })
 
