@@ -26,10 +26,10 @@ export const SchemioScriptLanguage = LRLanguage.define({
         FuncName: t.function(t.strong),
         FuncArgName: t.attributeName,
         Number: t.number,
-        CallExpression: t.macroName,
+        CallExpression: t.constant(t.variableName),
         LineComment: t.lineComment,
         BlockComment: t.blockComment,
-        ExternalObjectReference: t.strong,
+        ExternalObjectReference: t.macroName,
         StructPropertyName: t.propertyName,
         "( )": t.paren
       })
