@@ -41,6 +41,14 @@ local q = 34
 
 Script(VariableDeclaration(local,VariableName,Number))
 
+# Local variable assigment with let keyword
+
+let q = 34
+
+==>
+
+Script(VariableDeclaration(let,VariableName,Number))
+
 
 # Logic expression
 

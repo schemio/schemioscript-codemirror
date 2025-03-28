@@ -165,7 +165,7 @@ DecrementByExpression {
 
 VariableName { identifier ~name }
 
-variableDeclarationKeyword { kw<"local"> }
+variableDeclarationKeyword { kw<"local"> | kw<"let"> }
 
 VariableDeclaration {
   variableDeclarationKeyword VariableName ("=" expression)?
